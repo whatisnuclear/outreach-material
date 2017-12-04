@@ -8,7 +8,7 @@ Your browser does not support the HTML5 canvas tag.</canvas>
 <p > </p>
 
 <button id="startbutton" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> Fire a neutron!</button>
-
+<p id="a" > </p>
 <script>
 
 var canvas = document.getElementById('fissionGameCanvas');
@@ -42,9 +42,9 @@ function drawImg(x,Img){
   ctx.closePath();
 }
 
-function draw_scene( r, resImg, b, n, c, cannonImg, u, u235Img ){
+function draw_scene( fisRes, b, n, c, u ){
   clear();
-  drawImg( r, resImg );
+  drawImg( fisRes, fisResImg );
   draw_bar(b.x,b.y,b.w,b.h);
   if ( n != false ){ draw_neutron(n.x,n.y); }
   drawImg(c,cannonImg);
@@ -72,7 +72,7 @@ function incE(){
 
   // Reset the charge up bar so that it doesnt get 1e9 speed
   if ( energy > 30 ){  
-    draw_scene( r, resImg, b, n, c, cannonImg, u, u235Img );
+    draw_scene( fisRes, b, n, c, u );
     energy = 0;
     bar_x = canvas.width*0.15;
   }
@@ -97,74 +97,73 @@ function mouseUp(){
 
 
 
-function update_neutron(u,b,grav,c,n,refreshID,r){
+function update_neutron(u,b,grav,c,n,refreshID,fisRes){
 
-  draw_scene( r, resImg, b, n, c, cannonImg, u, u235Img );
 
   n.x += n.vx; n.y -= n.vy; n.vy -= grav;
 
   if( n.y > u.y + u.w*0.5 && n.x > u.x && n.x < u.x + u.w ){
-    fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg);
+    fission_event(u,b,c,u,fisRes);
     clearInterval(refreshID);
-    bar_x = canvas.width*0.15;
   }
   if( ( n.y > b.y && n.x > b.x && n.x < b.x + b.w ) ||  // Hit the barrier
         n.x > canvas.width + 50                     ||  // Went too far right
         n.y > canvas.height*0.95 ){                     // Hit the ground
     clearInterval(refreshID); 
-    bar_x = canvas.width*0.15; 
     startbutton.disabled = false;
   }
 
+  draw_scene( fisRes, b, n, c, u );
+  bar_x = canvas.width*0.15;
   return n;
 }
 
 
 
-function wiggleHelper( u, b, c, u235Img, cannonImg, r, resImg ){
-  draw_scene( r, resImg, b, false, c, cannonImg, u, u235Img );
+function wiggleHelper( u, b, c, r ){
+  draw_scene( fisRes, b, false, c, u );
 }
 
 
-function wiggleU235(u,b,c,u235Img,cannonImg,r,resImg){
+function wiggleU235(u,b,c,r){
   u.x += 5; u.y += 5;
-  draw_scene( r, resImg, b, false, c, cannonImg, u, u235Img );
+  draw_scene( fisRes, b, false, c, u );
   u.x -= 5; u.y -= 5;
-  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
   u.x += 6; u.y -= 6;
-  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
   u.x -= 6; u.y += 6;
-  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
   return u;
 }
 
 
-function fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg){
+function fission_event(u,b,c,u,fisRes){
   var uf1 = { x : u.x, y : u.y, w : u.w*0.7, h : u.h*0.7};
   var uf2 = { x : u.x+u.w*0.1, y : u.y+u.w*0.1, w : u.w * 0.7, h : u.h*0.7};
   var jiggleID = setInterval(function(){
-  u = wiggleU235(u, b, c, u235Img,cannonImg,r,resImg);},150);
+  u = wiggleU235(u, b, c, fisRes);},150);
 
   setTimeout(function(){
     clearInterval(jiggleID);
-    draw_scene( r, resImg, b, false, c, cannonImg, false, u235Img );
+    draw_scene( fisRes, b, false, c, false );
     drawImg(uf1,u235frag1Img); drawImg(uf2,u235frag2Img);
-
     var fragIntID = setInterval(function(){
-      n = update_fragment1(uf1,uf2,b,c,fragIntID,u,r);
+      n = update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes);
     },10);
 
   },2000);	
 
 }
 
-function update_fragment1(uf1,uf2,b,c,fragIntID,u,r){
+function update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes){
 
-  draw_scene( r, resImg, b, false, c, cannonImg, false, u235Img );
+  draw_scene( fisRes, b, false, c, false );
 
   uf1.x -= 3; uf1.y -= 1; uf2.x += 1; uf2.y -= 4;
 
-  drawImg(uf1,u235frag1Img); drawImg(uf2,u235frag2Img);
+  drawImg(uf1,u235frag1Img); 
+  drawImg(uf2,u235frag2Img);
 
   if( uf1.x < -200 ){
     clearInterval(fragIntID); 
@@ -175,35 +174,33 @@ function update_fragment1(uf1,uf2,b,c,fragIntID,u,r){
 
 
 
-var resImg = new Image();
- resImg.src = 'resonance2.png';
-//resImg.src = 'https://atomikit.tech/wp-content/custom-files/resonance2.png';
+var fisResImg = new Image();
+ fisResImg.src = 'resonance1.png';
+
+var absResImg = new Image();
+ absResImg.src = 'resonance2.png';
 
 var cannonImg = new Image();
-cannonImg.src = 'https://atomikit.tech/wp-content/custom-files/cannon.jpeg';
-// cannonImg.src = 'cannon.jpeg';
+cannonImg.src = 'cannon.jpeg';
 
 var u235Img = new Image();
-u235Img.src = 'https://atomikit.tech/wp-content/custom-files/u235.png';
  u235Img.src = 'u235.png';
 
 var u235frag1Img = new Image();
-u235frag1Img.src = 'https://atomikit.tech/wp-content/custom-files/u235frag1.png';
  u235frag1Img.src = 'u235frag1.png';
 
 var u235frag2Img = new Image();
-u235frag2Img.src = 'https://atomikit.tech/wp-content/custom-files/u235frag2.png';
- u235frag1Img.src = 'u235frag2.png';
+ u235frag2Img.src = 'u235frag2.png';
 
 var gravity = 0.01;
 var c_W = canvas.width;	
 var c_H = canvas.height;	
 
-var b = { x : c_W*0.3,      y : c_H*0.4,    w : c_W*0.1,  h  : c_H*0.6,  };
-var n = { x : c_W*0.1,      y : c_H*0.9,    vx : 0.5,     vy : 0 };
-var u = { x : c_W*0.7,      y : c_H*0.8,    w  : c_W*0.15, h : c_W*0.15 };
-var r = { x : c_W*0.15,     y : 0,          w  : c_W*0.7,  h : c_H*0.25 };
-var c = { x : c_W*0.1 - 50, y : c_H*0.9-40, w  : 90,       h : 100 };
+var b  = { x : c_W*0.3,      y : c_H*0.4,    w : c_W*0.1,  h  : c_H*0.6,  };
+var n  = { x : c_W*0.1,      y : c_H*0.9,    vx : 0.5,     vy : 0 };
+var u  = { x : c_W*0.7,      y : c_H*0.8,    w  : c_W*0.15, h : c_W*0.15 };
+var fisRes = { x : c_W*0.15,     y : 0,          w  : c_W*0.7,  h : c_H*0.25 };
+var c  = { x : c_W*0.1 - 50, y : c_H*0.9-40, w  : 90,       h : 100 };
 
 
 ctx.font = "50px Times New Roman";
@@ -211,7 +208,7 @@ ctx.fillText("Welcome!",c_W*0.3,c_H*0.5);
 startbutton.disabled=true;
 
 setTimeout(function(){
-  draw_scene( r, resImg, b, n, c, cannonImg, u, u235Img );
+  draw_scene( fisRes, b, n, c, u );
   startbutton.disabled=false;
 
 },1500);
@@ -220,11 +217,11 @@ function shoot(energy) {
 
 var n = { x : c_W*0.1, y : c_H*0.9, vx : 0.5, vy : energy, size : 10 };
 
-  draw_scene( r, resImg, b, n, c, cannonImg, u, u235Img );
+  draw_scene( fisRes, b, n, c, u );
 
 
   var refreshID = setInterval(function(){
-    n = update_neutron(u,b,gravity,c,n,refreshID,r);
+    n = update_neutron(u,b,gravity,c,n,refreshID,fisRes);
   },1);
   draw_neutron(n.x,n.y);
 
