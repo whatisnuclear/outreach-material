@@ -3,15 +3,15 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
+<canvas id="fissionGameCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 <p > </p>
 
-<button id="startbutton" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> HERE WE GO </button>
+<button id="startbutton" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> Fire a neutron!</button>
 
 <script>
 
-var canvas = document.getElementById('myCanvas');
+var canvas = document.getElementById('fissionGameCanvas');
 var ctx = canvas.getContext("2d");
 
 
@@ -72,68 +72,57 @@ function clear(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-function update_neutron(u,b,grav,c,n,refreshID,cannonImg,u235Img,u235frag1Img,u235frag2Img,r,resImg){
-	clear();
+
+function draw_scene( r, resImg, b, n, o, c, cannonImg, u, u235Img ){
+        clear();
 	draw_resonance(r,resImg);
 	draw_bar(b.x,b.y,b.w,b.h);
-	draw_neutron(n.x,n.y,n.size);
+        if ( n != false ){ draw_neutron(n.x,n.y,n.size); }
 	draw_cannon(o_x,o_y,c.h,c.w,cannonImg);
-	draw_u235(u,u235Img);
-
-	n.x += n.vx;
-	n.y -= n.vy;
-	n.vy -= grav;
-	if( n.y > u.y + u.w*0.5 && n.x > u.x && n.x < u.x + u.w ){
-		fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg);
-		clearInterval(refreshID);
-		bar_x = canvas.width*0.15;
-	}
-	if( n.y > o_y ){ clearInterval(refreshID); bar_x = canvas.width*0.15;startbutton.disabled=false;}
-	if( n.y > b.y && n.x > b.x && n.x < b.x + b.w ){ clearInterval(refreshID); bar_x = canvas.width*0.15; startbutton.disabled=false; }
-	if( n.x > canvas.width + 50 ){ clearInterval(refreshID); bar_x = canvas.width*0.15; startbutton.disabled=false; }
-	return n;
+        if ( u != false ){ draw_u235(u,u235Img); }
 }
 
 
+
+
+function update_neutron(u,b,grav,c,n,refreshID,cannonImg,u235Img,u235frag1Img,u235frag2Img,r,resImg){
+
+  draw_scene( r, resImg, b, n, o, c, cannonImg, u, u235Img );
+
+  n.x += n.vx; n.y -= n.vy; n.vy -= grav;
+
+  if( n.y > u.y + u.w*0.5 && n.x > u.x && n.x < u.x + u.w ){
+    fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg);
+    clearInterval(refreshID);
+    bar_x = canvas.width*0.15;
+  }
+  if( ( n.y > b.y && n.x > b.x && n.x < b.x + b.w ) ||  // Hit the barrier
+        n.x > canvas.width + 50                     ||  // Went too far right
+        n.y > o_y ){                                    // Hit the ground
+    clearInterval(refreshID); 
+    bar_x = canvas.width*0.15; 
+    startbutton.disabled=false;
+  }
+
+  return n;
+}
+function wiggleHelper( u, b, c, u235Img, cannonImg, r, resImg ){
+        draw_scene( r, resImg, b, false, o, c, cannonImg, u, u235Img );
+}
+
+
+
+
 function wiggleU235(u,b,c,u235Img,cannonImg,r,resImg){
-	u.x += 5;
-	u.y += 5;
-	clear();
-	draw_u235(u,u235Img);
-	draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
-	draw_bar(b.x,b.y,b.w,b.h);
-	draw_resonance(r,resImg);
-
-	u.x -= 5;
-	u.y -= 5;
-	setTimeout(function(){
-		clear();
-		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
-		draw_bar(b.x,b.y,b.w,b.h);
-		draw_u235(u,u235Img);	
-		draw_resonance(r,resImg);
-	
-	},50)
-	u.x += 6;
-	u.y -= 6;
-	setTimeout(function(){
-		clear();
-		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
-		draw_bar(b.x,b.y,b.w,b.h);
-		draw_u235(u,u235Img);		
-		draw_resonance(r,resImg);
-	},50)
-	u.x -= 6;
-	u.y += 6;
-	setTimeout(function(){
-		clear();
-		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
-		draw_bar(b.x,b.y,b.w,b.h);
-		draw_u235(u,u235Img);	
-		draw_resonance(r,resImg);	
-	},50)
-
-	return u;
+  u.x += 5; u.y += 5;
+  draw_scene( r, resImg, b, false, o, c, cannonImg, u, u235Img );
+  u.x -= 5; u.y -= 5;
+  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  u.x += 6; u.y -= 6;
+  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  u.x -= 6; u.y += 6;
+  setTimeout(function(){ wiggleHelper(u,b,c,u235Img,cannonImg,r,resImg ); },50)
+  return u;
 }
 
 
@@ -145,10 +134,8 @@ function fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,res
 			u = wiggleU235(u, b, c, u235Img,cannonImg,r,resImg);},150);
 	setTimeout(function(){
 		clearInterval(jiggleID);
-		clear();
-		draw_bar(b.x,b.y,b.w,b.h);
-		draw_cannon(o_x,o_y,c.h,c.w,cannonImg);
-		draw_resonance(r,resImg); 
+
+                draw_scene( r, resImg, b, false, o, c, cannonImg, false, u235Img );
 		draw_u235_frag(uf1,u235frag1Img);
 		draw_u235_frag(uf2,u235frag2Img);
 		var move_frag_1ID = setInterval(function(){
@@ -158,10 +145,7 @@ function fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,res
 }
 
 function update_fragment1(uf1,u235frag1Img,uf2,u235frag2,b,c,move_frag_1ID,u,u235Img,r,resImg){
-	clear();
-	draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
-	draw_bar(b.x,b.y,b.w,b.h);
-	draw_resonance(r,resImg);
+        draw_scene( r, resImg, b, false, o, c, cannonImg, false, u235Img );
 
 	uf1.x -= 3;
 	uf1.y -= 1;
@@ -223,7 +207,7 @@ u235frag2Img.src = 'https://atomikit.tech/wp-content/custom-files/u235frag2.png'
  u235frag1Img.src = 'u235frag2.png';
 
 
-	var canvas = document.getElementById('myCanvas');
+	var canvas = document.getElementById('fissionGameCanvas');
 
 	var n_x = canvas.width*0.10;
 	var n_y = canvas.height*0.90;
