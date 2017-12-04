@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<p > </p>
+
+<button id="startbutton" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> HERE WE GO </button>
+<p id="b" > </p>
+<p id="a" > </p>
+
+<script>
+
+var canvas = document.getElementById('myCanvas');
+
+
+function draw_bar(x,y,w,h){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.beginPath();
+	ctx.rect(x, y, w, h);
+	ctx.stroke();
+	ctx.fillStyle = "#C4C3C2";
+	ctx.fill();
+	ctx.closePath();	
+}
+
+var energy = 0;
+var bar_x = canvas.width*0.15;
+function incE(){
+	// document.getElementById("b").innerHTML = energy;
+	energy = energy+1;
+	bar_x += canvas.width*0.35/16 ;
+	draw_bar(bar_x,0,5,canvas.height*0.25);
+}
+var eid;
+function mouseDown(energy){
+	energy = 0;
+	eid = setInterval(function(){energy = incE(energy);},30);
+}
+function mouseUp(){
+	clearInterval(eid);
+	myFunction(energy/4);
+	energy = 0;
+}
+
+
+function draw_barrier(x,y,w,h){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.beginPath();
+	ctx.rect(x, y, w, h);
+	ctx.stroke();
+	ctx.fillStyle = "#C4C3C2";
+	ctx.fill();
+	ctx.closePath();
+
+}
+
+
+function draw_neutron(x,y,size){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.beginPath();
+	ctx.arc(x, y, size, 0, 2 * Math.PI);
+	ctx.stroke();
+	ctx.fillStyle = "red";
+	ctx.fill();
+	ctx.closePath();
+
+}
+
+function clear(){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.clearRect(0,0,c.width,c.height);
+}
+
+function update_neutron(u,b,grav,c,n,refreshID,cannonImg,u235Img,u235frag1Img,u235frag2Img,r,resImg){
+	clear();
+	draw_resonance(r,resImg);
+	draw_barrier(b.x,b.y,b.w,b.h);
+	draw_neutron(n.x,n.y,n.size);
+	draw_cannon(o_x,o_y,c.h,c.w,cannonImg);
+	draw_u235(u,u235Img);
+
+	n.x += n.vx;
+	n.y -= n.vy;
+	n.vy -= grav;
+	if( n.y > u.y + u.w*0.5 && n.x > u.x && n.x < u.x + u.w ){
+		fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg);
+		clearInterval(refreshID);
+		bar_x = canvas.width*0.15;
+	}
+	if( n.y > o_y ){ clearInterval(refreshID); bar_x = canvas.width*0.15;startbutton.disabled=false;}
+	if( n.y > b.y && n.x > b.x && n.x < b.x + b.w ){ clearInterval(refreshID); bar_x = canvas.width*0.15; startbutton.disabled=false; }
+	if( n.x > canvas.width + 50 ){ clearInterval(refreshID); bar_x = canvas.width*0.15; startbutton.disabled=false; }
+	return n;
+}
+
+
+function wiggleU235(u,b,c,u235Img,cannonImg,r,resImg){
+	u.x += 5;
+	u.y += 5;
+	clear();
+	draw_u235(u,u235Img);
+	draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+	draw_barrier(b.x,b.y,b.w,b.h);
+	draw_resonance(r,resImg);
+
+	u.x -= 5;
+	u.y -= 5;
+	setTimeout(function(){
+		clear();
+		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+		draw_barrier(b.x,b.y,b.w,b.h);
+		draw_u235(u,u235Img);	
+		draw_resonance(r,resImg);
+	
+	},50)
+	u.x += 6;
+	u.y -= 6;
+	setTimeout(function(){
+		clear();
+		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+		draw_barrier(b.x,b.y,b.w,b.h);
+		draw_u235(u,u235Img);		
+		draw_resonance(r,resImg);
+	},50)
+	u.x -= 6;
+	u.y += 6;
+	setTimeout(function(){
+		clear();
+		draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+		draw_barrier(b.x,b.y,b.w,b.h);
+		draw_u235(u,u235Img);	
+		draw_resonance(r,resImg);	
+	},50)
+
+	return u;
+}
+
+
+function fission_event(u,u235frag1Img,u235frag2Img,b,c,u,u235Img,cannonImg,r,resImg){
+	// document.getElementById("b").innerHTML = "FISSION";
+	var uf1 = { x : u.x, y : u.y, w : u.w*0.7};
+	var uf2 = { x : u.x+u.w*0.1, y : u.y+u.w*0.1, w : u.w * 0.7};
+	var jiggleID = setInterval(function(){
+			u = wiggleU235(u, b, c, u235Img,cannonImg,r,resImg);},150);
+	setTimeout(function(){
+		clearInterval(jiggleID);
+		clear();
+		draw_barrier(b.x,b.y,b.w,b.h);
+		draw_cannon(o_x,o_y,c.h,c.w,cannonImg);
+		draw_resonance(r,resImg); 
+		draw_u235_frag(uf1,u235frag1Img);
+		draw_u235_frag(uf2,u235frag2Img);
+		var move_frag_1ID = setInterval(function(){
+			n = update_fragment1(uf1,u235frag1Img,uf2,u235frag2Img,b,c,move_frag_1ID,u,u235Img,r,resImg);},10);
+	},2000);	
+
+}
+
+function update_fragment1(uf1,u235frag1Img,uf2,u235frag2,b,c,move_frag_1ID,u,u235Img,r,resImg){
+	clear();
+	draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+	draw_barrier(b.x,b.y,b.w,b.h);
+	draw_resonance(r,resImg);
+
+	uf1.x -= 3;
+	uf1.y -= 1;
+	uf2.x += 1;
+	uf2.y -= 4;
+	draw_u235_frag(uf1,u235frag1Img);
+	draw_u235_frag(uf2,u235frag2Img);
+	if(uf1.x < -200){clearInterval(move_frag_1ID); draw_u235(u,u235Img);startbutton.disabled=false;}
+}
+
+
+
+
+function draw_cannon(o_x,o_y,h,w,cannonImg){
+	var canvas = document.getElementById('myCanvas');
+	var context = canvas.getContext('2d');
+	context.drawImage(cannonImg, o_x-0.5*w, o_y-0.5*h, h,w);
+	
+}
+
+function draw_u235(u,u235Img){
+	var canvas = document.getElementById('myCanvas');
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.drawImage(u235Img,u.x,u.y,u.w,u.w);
+	context.closePath();
+	
+}
+function draw_u235_frag(u,u235fragImg){
+	var canvas = document.getElementById('myCanvas');
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.drawImage(u235fragImg,u.x,u.y,u.w,u.w);
+	context.closePath();
+	
+}
+
+function draw_resonance(r,resImg){
+	var canvas = document.getElementById('myCanvas');
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.drawImage(resImg,r.x,r.y,r.w,r.h);
+	context.closePath();
+	
+}
+
+
+
+var resImg = new Image();
+// resImg.src = 'resonance2.png';
+resImg.src = 'https://atomikit.tech/wp-content/custom-files/resonance2.png';
+
+var cannonImg = new Image();
+cannonImg.src = 'https://atomikit.tech/wp-content/custom-files/cannon.jpeg';
+
+var u235Img = new Image();
+u235Img.src = 'https://atomikit.tech/wp-content/custom-files/u235.png';
+
+var u235frag1Img = new Image();
+u235frag1Img.src = 'https://atomikit.tech/wp-content/custom-files/u235frag1.png';
+
+var u235frag2Img = new Image();
+u235frag2Img.src = 'https://atomikit.tech/wp-content/custom-files/u235frag2.png';
+
+
+	var canvas = document.getElementById('myCanvas');
+
+	var n_x = canvas.width*0.10;
+	var n_y = canvas.height*0.90;
+	var n_vx = 0.5;
+	var n_vy = 2.5;
+
+	var n_size = 10;
+	var gravity = 0.01;
+
+	var o_x = n_x;			var o_y = n_y;
+	var b_x = canvas.width*0.30;	var b_h = canvas.height*0.6;
+	var b_w = canvas.width*0.1;		var b_y = canvas.height-b_h;
+	var c_w = 100; var c_h = 80;
+
+	var u_x = canvas.width*0.7;
+	var u_w = canvas.width*0.15;
+	var u_y = canvas.height*0.8;
+	
+	var r_x = canvas.width*0.15;
+	var r_w = canvas.width*0.7;
+	var r_h = canvas.height*0.25;
+	var r_y = canvas.height*0.00;
+
+
+	var o = { x : o_x, y : o_y };
+	var b = { x : b_x, y : b_y, h  : b_h, w : b_w };
+	var n = { x : n_x, y : n_y, vx : n_vx, vy : n_vy, size : n_size };
+	var u = { x : u_x, y : u_y, w  : u_w };
+	var c = { x : o_x, y : o_y, w  : c_w, h : c_h };
+	var r = { x : r_x, y : r_y, w  : r_w, h : r_h };
+
+
+var ctx = canvas.getContext("2d");
+ctx.font = "50px Times New Roman";
+ctx.fillText("Welcome!",canvas.width*0.3,canvas.height*0.5);
+startbutton.disabled=true;
+
+setTimeout(function(){
+	clear();
+	draw_resonance(r,resImg);
+	draw_cannon(c.x,c.y,c.h,c.w,cannonImg);
+	draw_barrier(b.x,b.y,b.w,b.h);
+	draw_u235(u,u235Img);
+	startbutton.disabled=false;
+
+},1500);
+
+function myFunction(energy) {
+	n_vy = energy;
+
+	var n = { x : n_x, y : n_y, vx : n_vx, vy : n_vy, size : n_size };
+
+	draw_cannon(o.x,o.y,c.h,c.w,cannonImg);
+	draw_neutron(n.x,n.y,n.size);
+	draw_barrier(b.x,b.y,b.w,b.h);
+
+
+	var refreshID = setInterval(function(){
+		n = update_neutron(u,b,gravity,c,n,refreshID,cannonImg,u235Img,u235frag1Img,u235frag2Img,r,resImg);},1);
+	draw_neutron(n.x,n.y,n.size);
+
+}
+
+
+
+</script> 
+
+</body>
+</html>
