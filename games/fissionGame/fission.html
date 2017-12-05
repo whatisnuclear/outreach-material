@@ -3,15 +3,30 @@
 <html>
 <body>
 
-<canvas id="fissionGameCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
-<p > </p>
+<div style="position: relative;">
+ <canvas id="layer2" width="600" height="600" 
+   style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+ <canvas id="fissionGameCanvas" width="600" height="600" 
+   style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+ <canvas id="layer3" width="600" height="600" 
+   style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
 
-<button id="startbutton" style="font-size:25px" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> Fire a neutron!</button>
-<div width="600px" >
-<p id="a" style="font-size:25px;width:550px;text-align:center;" > </p>
+<button id="startbutton" style="position:absolute; left:150px; top:620px;font-size:25px" onmousedown="mouseDown(energy)" onmouseup="mouseUp();this.disabled=true"> Fire a neutron!</button>
+
+<div width="200px" style="position:absolute; left:450px;top:120px;" >
+<p id="a" style="font-size:25px;width:250px;text-align:center;" > </p>
 </div>
+
+</div>
+
+<p > </p>
 <script>
+
+var canvas2 = document.getElementById('layer2');
+var ctx2 = canvas2.getContext("2d");
+
+var canvas3 = document.getElementById('layer3');
+var ctx3 = canvas3.getContext("2d");
 
 var canvas = document.getElementById('fissionGameCanvas');
 var ctx = canvas.getContext("2d");
@@ -19,13 +34,13 @@ var ctx = canvas.getContext("2d");
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // Drawing Functions
-function draw_bar(x,y,w,h){
-  ctx.beginPath();
-  ctx.rect(x, y, w, h);
-  ctx.stroke();
-  ctx.fillStyle = "#C4C3C2";
-  ctx.fill();
-  ctx.closePath();	
+function draw_bar(x,y,w,h,context){
+  context.beginPath();
+  context.rect(x, y, w, h);
+  context.stroke();
+  context.fillStyle = "#C4C3C2";
+  context.fill();
+  context.closePath();	
 }
 
 function draw_neutron(x,y){
@@ -38,28 +53,16 @@ function draw_neutron(x,y){
 
 }
 
-function drawImg(x,Img){
-  ctx.beginPath();
-  ctx.drawImage(Img,x.x,x.y,x.w,x.h);
-  ctx.closePath();
+function drawImg(x,Img,context){
+  context.beginPath();
+  context.drawImage(Img,x.x,x.y,x.w,x.h);
+  context.closePath();
 }
 
 function draw_scene( fisRes, absRes, b, n, c, u ){
   clear();
-  drawImg( fisRes, fisResImg );
-  drawImg( absRes, absResImg );
-  draw_bar(b.x,b.y,b.w,b.h);
   if ( n != false ){ draw_neutron(n.x,n.y); }
-  drawImg(c,cannonImg);
-  if ( u != false ){ drawImg(u,u235Img); }
-  ctx.font = "30px Times New Roman";
-
-  ctx.fillStyle = "black";
-  ctx.fillText("Fission",c_W*0.47,c_H*0.21);
-  //ctx.fillText("Resonance",c_W*0.51,c_H*0.30);
-  ctx.fillText("Absorption",c_W*0.23,c_H*0.23);
-  //ctx.fillText("Resonance",c_W*0.17,c_H*0.30);
-
+  if ( u != false ){ drawImg(u,u235Img,ctx); }
 }
 
 function clear(){
@@ -88,7 +91,7 @@ function incE(){
     bar_x = canvas.width*0.05;
   }
 
-  draw_bar(bar_x,0,5,canvas.height*0.25);
+  draw_bar(bar_x,0,5,canvas.height*0.25,ctx);
 
 }
 
@@ -98,7 +101,7 @@ var eid;
 
 function mouseDown(energy){
   document.getElementById("a").innerHTML = "  ";
-  eid = setInterval(function(){energy = incE(energy);},100);
+  eid = setInterval(function(){energy = incE(energy);},40);
 }
 
 function mouseUp(){
@@ -183,7 +186,7 @@ function fission_event(u,b,c,u,fisRes){
   setTimeout(function(){
     clearInterval(jiggleID);
     draw_scene( fisRes, absRes, b, false, c, false );
-    drawImg(uf1,u235frag1Img); drawImg(uf2,u235frag2Img);
+    drawImg(uf1,u235frag1Img,ctx); drawImg(uf2,u235frag2Img,ctx);
     var fragIntID = setInterval(function(){
       n = update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes);
     },10);
@@ -199,12 +202,12 @@ function update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes){
 
   uf1.x -= 3; uf1.y -= 1; uf2.x += 1; uf2.y -= 4;
 
-  drawImg(uf1,u235frag1Img); 
-  drawImg(uf2,u235frag2Img);
+  drawImg(uf1,u235frag1Img,ctx); 
+  drawImg(uf2,u235frag2Img,ctx);
 
   if( uf1.x < -200 ){
     clearInterval(fragIntID); 
-    drawImg(u,u235Img);
+    drawImg(u,u235Img,ctx);
     document.getElementById("a").innerHTML = "Nice job!";
     startbutton.disabled = false;
   }
@@ -247,6 +250,18 @@ ctx.fillText("Welcome!",c_W*0.3,c_H*0.5);
 startbutton.disabled=true;
 
 setTimeout(function(){
+  drawImg( fisRes, fisResImg, ctx2 );
+  drawImg( absRes, absResImg, ctx2 );
+  drawImg(c,cannonImg, ctx3 );
+  draw_bar(b.x,b.y,b.w,b.h,ctx2);
+  ctx2.font = "30px Times New Roman";
+  ctx2.fillStyle = "black";
+  ctx2.fillText("Fission",c_W*0.47,c_H*0.21);
+  //ctx.fillText("Resonance",c_W*0.51,c_H*0.30);
+  ctx2.fillText("Absorption",c_W*0.23,c_H*0.23);
+  //ctx.fillText("Resonance",c_W*0.17,c_H*0.30);
+
+
   draw_scene( fisRes, absRes, b, n, c, u );
   startbutton.disabled=false;
 
@@ -255,13 +270,12 @@ setTimeout(function(){
 function shoot(energy) {
 
 var n = { x : c_W*0.1, y : c_H*0.9, vx : 0.5, vy : energy, size : 10 };
-
   draw_scene( fisRes, absRes, b, n, c, u );
 
 
   var refreshID = setInterval(function(){
     n = update_neutron(u,b,gravity,c,n,refreshID,fisRes);
-  },1);
+  },0.001);
   draw_neutron(n.x,n.y);
 
 }
