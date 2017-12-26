@@ -76,6 +76,10 @@ function clear(){
 
 
 
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// This section is to handle the charging up (putting the gray bars over the
+// resonance as the user gives the neutron energy). 
 
 var energy = 0;
 var bar_x = canvas.width*0.05;
@@ -110,32 +114,15 @@ function mouseUp(){
   energy = 0;
 }
 
-  function wrapText(context, text, x, y, maxWidth, lineHeight) {
-        var words = text.split(' ');
-        var line = '';
-
-        for(var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + ' ';
-          var metrics = context.measureText(testLine);
-          var testWidth = metrics.width;
-          if (testWidth > maxWidth && n > 0) {
-            context.fillText(line, x, y);
-            line = words[n] + ' ';
-            y += lineHeight;
-          }
-          else {
-            line = testLine;
-          }
-        }
-        context.fillText(line, x, y);
-      }
-      
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 
-function update_neutron(u,b,grav,c,n,refreshID,fisRes){
+
+function update_neutron(u,b,c,n,refreshID,fisRes){
 
 
-  n.x += n.vx; n.y -= n.vy; n.vy -= grav;
+  n.x += n.vx; n.y -= n.vy; n.vy -= gravity;
 
   if( n.y > u.y + u.w*0.5 && n.x > u.x && n.x < u.x + u.w ){
     fission_event(u,b,c,u,fisRes);
@@ -158,20 +145,15 @@ function update_neutron(u,b,grav,c,n,refreshID,fisRes){
 
 
 
-function wiggleHelper( u, b, c, r ){
-  draw_scene( fisRes, absRes, b, false, c, u );
-}
-
-
 function wiggleU235(u,b,c,r){
   u.x += 5; u.y += 5;
   draw_scene( fisRes, absRes, b, false, c, u );
   u.x -= 5; u.y -= 5;
-  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
+  setTimeout(function(){ draw_scene( fisRes, absRes, b, false, c, u ); },50)
   u.x += 6; u.y -= 6;
-  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
+  setTimeout(function(){ draw_scene( fisRes, absRes, b, false, c, u ); },50)
   u.x -= 6; u.y += 6;
-  setTimeout(function(){ wiggleHelper(u,b,c,r ); },50)
+  setTimeout(function(){ draw_scene( fisRes, absRes, b, false, c, u ); },50)
   return u;
 }
 
@@ -188,7 +170,7 @@ function fission_event(u,b,c,u,fisRes){
     draw_scene( fisRes, absRes, b, false, c, false );
     drawImg(uf1,u235frag1Img,ctx); drawImg(uf2,u235frag2Img,ctx);
     var fragIntID = setInterval(function(){
-      n = update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes);
+      n = update_fragment(uf1,uf2,b,c,fragIntID,u,fisRes);
     },10);
 
     document.getElementById("a").innerHTML = "KABOOM";
@@ -196,7 +178,7 @@ function fission_event(u,b,c,u,fisRes){
 
 }
 
-function update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes){
+function update_fragment(uf1,uf2,b,c,fragIntID,u,fisRes){
 
   draw_scene( fisRes, absRes, b, false, c, false );
 
@@ -215,34 +197,23 @@ function update_fragment1(uf1,uf2,b,c,fragIntID,u,fisRes){
 
 
 
-var fisResImg = new Image();
- fisResImg.src = 'resonance1.png';
-
-var absResImg = new Image();
- absResImg.src = 'resonance2.png';
-
-var cannonImg = new Image();
-cannonImg.src = 'cannon.jpeg';
-
-var u235Img = new Image();
- u235Img.src = 'u235.png';
-
-var u235frag1Img = new Image();
- u235frag1Img.src = 'u235frag1.png';
-
-var u235frag2Img = new Image();
- u235frag2Img.src = 'u235frag2.png';
+var fisResImg    = new Image(); fisResImg.src    = 'resonance1.png';
+var absResImg    = new Image(); absResImg.src    = 'resonance2.png';
+var cannonImg    = new Image(); cannonImg.src    = 'cannon.jpeg';
+var u235Img      = new Image(); u235Img.src      = 'u235.png';
+var u235frag1Img = new Image(); u235frag1Img.src = 'u235frag1.png';
+var u235frag2Img = new Image(); u235frag2Img.src = 'u235frag2.png';
 
 var gravity = 0.01;
 var c_W = canvas.width;	
 var c_H = canvas.height;	
 
-var b  = { x : c_W*0.3,      y : c_H*0.4,    w : c_W*0.1,  h  : c_H*0.6,  };
-var n  = { x : c_W*0.1,      y : c_H*0.9,    vx : 0.5,     vy : 0 };
-var u  = { x : c_W*0.75,      y : c_H*0.8,    w  : c_W*0.15, h : c_W*0.15 };
-var fisRes = { x : c_W*0.33,     y : 0,          w  : c_W*0.4,  h : c_H*0.25 };
-var absRes = { x : c_W*0.08,     y : 0,          w  : c_W*0.5,  h : c_H*0.25 };
-var c  = { x : c_W*0.1 - 50, y : c_H*0.9-40, w  : 90,       h : 100 };
+var b      = { x : c_W*0.3,    y : c_H*0.4,    w : c_W*0.1,  h  : c_H*0.6  };
+var n      = { x : c_W*0.1,    y : c_H*0.9,    vx : 0.5,     vy : 0        };
+var u      = { x : c_W*0.75,   y : c_H*0.8,    w  : c_W*0.15, h : c_W*0.15 };
+var fisRes = { x : c_W*0.33,   y : 0,          w  : c_W*0.4,  h : c_H*0.25 };
+var absRes = { x : c_W*0.08,   y : 0,          w  : c_W*0.5,  h : c_H*0.25 };
+var c      = { x : c_W*0.1-50, y : c_H*0.9-40, w  : 90,       h : 100      };
 
 
 ctx.font = "50px Times New Roman";
@@ -257,9 +228,7 @@ setTimeout(function(){
   ctx2.font = "30px Times New Roman";
   ctx2.fillStyle = "black";
   ctx2.fillText("Fission",c_W*0.47,c_H*0.21);
-  //ctx.fillText("Resonance",c_W*0.51,c_H*0.30);
   ctx2.fillText("Absorption",c_W*0.23,c_H*0.23);
-  //ctx.fillText("Resonance",c_W*0.17,c_H*0.30);
 
 
   draw_scene( fisRes, absRes, b, n, c, u );
@@ -274,13 +243,11 @@ var n = { x : c_W*0.1, y : c_H*0.9, vx : 0.5, vy : energy, size : 10 };
 
 
   var refreshID = setInterval(function(){
-    n = update_neutron(u,b,gravity,c,n,refreshID,fisRes);
+    n = update_neutron(u,b,c,n,refreshID,fisRes);
   },0.001);
   draw_neutron(n.x,n.y);
 
 }
-
-
 
 </script> 
 
