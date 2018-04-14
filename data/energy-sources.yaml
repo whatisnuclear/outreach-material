@@ -1,0 +1,80 @@
+capacity factors in usa:
+    ref:  U.S. Energy Information Administration, Form EIA-923, Power Plant Operations Report; U.S. Energy Information Administration, Form EIA-860, 'Annual Electric Generator Report' and Form EIA-860M, 'Monthly Update to the Annual Electric Generator Report.'
+    url: https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b
+    notes: "2016 values"
+    units: "%"
+    title: "Capacity factors of non-fossil energy sources in the USA, 2016"
+    val:
+        nuclear: 92.3
+        hydro: 38.2
+        wind: 34.5
+        solar pv: 25.1
+        solar thermal: 22.2
+        landfill gas: 69.7
+        other biomass: 55.6
+        geothermal: 73.9
+
+lifecycle emissions:
+    ref: "Schlömer S., et.al., 2014:  Annex  III:  Technology-specific  cost  and  performance  parameters.  In:  Climate  Change  2014:  Mitigation  of  Climate  Change.  Contribution  of  Working  Group  III  to  the  Fifth  Assessment  Report  of  the  IPCC (pg 1335)"
+    url: https://www.ipcc.ch/pdf/assessment-report/ar5/wg3/ipcc_wg3_ar5_annex-iii.pdf
+    title: Lifecycle emissions  (including albedo), (min, median, max) 
+    units: kgCO2-eq/kWh
+    val: 
+        coal: [740,820,910]
+        biomass cofiring: [620,740,890]
+        gas combined cycle: [410,490,650]
+        biomass dedicated: [130,230,420]
+        solar pv utility: [18,48,180]
+        solar pv rooftop: [26,41,60]
+        geothermal: [6,38,79]
+        concentrated solar: [8.8, 27,63]
+        hydropower: [1, 24, 2200]
+        tidal: [5.6, 17, 28]
+        nuclear: [3.7, 12, 110]
+        wind offshore: [8,12,35]
+        wind onshore: [7,11,56]
+
+energy density:
+    ref: Energy Density (wikipedia)
+    url: https://en.wikipedia.org/wiki/Energy_density
+    notes: How much energy is stored in different fuels, per mass
+    units: MJ/kg
+    val:
+        uranium: 8.062e7
+        thorium: 7.942e7
+        methane: 55.5
+        diesel: 48.0
+        lpg: 46.4
+        gasoline: 46.4
+        coal: 30.0
+        wood: 16.2
+
+worldwide consumption:
+    ref: BP Statistical Review of World Energy 2017
+    url: https://www.bp.com/content/dam/bp/en/corporate/pdf/energy-economics/statistical-review-2017/bp-statistical-review-of-world-energy-2017-full-report.pdf
+    units: MTOE
+    title: World Energy Use by Source (2016)
+    notes: Worldwide primary energy consumption in 2016
+    val: 
+        oil: 4418.2
+        natural gas: 3204.1
+        coal: 3732.0
+        nuclear: 592.1
+        hydro: 910.3
+        renewables: 419.6
+
+worldwide resources:
+    ref: World Energy Resources (wikipedia)
+    url: https://en.wikipedia.org/wiki/World_energy_resources
+    notes: >
+        These values are highly uncertain estimates, can change with new exploration.
+        The uranium number includes known resources used in breeders. If seawater-dissolved
+        uranium is used, the value would be several orders of magnitude higher. Renewables
+        are limited by the total energy content of the Sun and will be computed and added 
+        later.
+    units: ZJ
+    val:
+        coal: 19.8
+        gas: 36.4
+        oil: 8.9
+        uranium: 1000
