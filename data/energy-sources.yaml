@@ -15,14 +15,15 @@ capacity factors in usa:
         geothermal: 73.9
 
 lifecycle emissions:
-    ref: "Schlömer S., et.al., 2014:  Annex  III:  Technology-specific  cost  and  performance  parameters.  In:  Climate  Change  2014:  Mitigation  of  Climate  Change.  Contribution  of  Working  Group  III  to  the  Fifth  Assessment  Report  of  the  IPCC (pg 1335)"
-    url: https://www.ipcc.ch/pdf/assessment-report/ar5/wg3/ipcc_wg3_ar5_annex-iii.pdf
-    title: Lifecycle emissions  (including albedo), (min, median, max) 
-    units: kgCO2-eq/kWh
+    ref: "Schlömer S., et.al., 2014:  Annex  III:  Technology-specific  cost  and  performance  parameters.  In:  Climate  Change  2014:  Mitigation  of  Climate  Change.  Contribution  of  Working  Group  III  to  the  Fifth  Assessment  Report  of  the  IPCC (Table A.III.2, pg 1335)"
+    url: https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf
+    title: Lifecycle greenhouse gas emissions
+    units: gCO$_2$-eq/kWh
     val: 
+    # min, median, max
         coal: [740,820,910]
         biomass cofiring: [620,740,890]
-        gas combined cycle: [410,490,650]
+        natural gas: [410,490,650]
         biomass dedicated: [130,230,420]
         solar pv utility: [18,48,180]
         solar pv rooftop: [26,41,60]
@@ -50,18 +51,34 @@ energy density:
         wood: 16.2
 
 worldwide consumption:
-    ref: BP Statistical Review of World Energy 2017
-    url: https://www.bp.com/content/dam/bp/en/corporate/pdf/energy-economics/statistical-review-2017/bp-statistical-review-of-world-energy-2017-full-report.pdf
+    ref: BP Statistical Review of World Energy 2019
+    url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/energy-economics/statistical-review/bp-stats-review-2019-full-report.pdf
     units: MTOE
-    title: World Energy Use by Source (2016)
-    notes: Worldwide primary energy consumption in 2016
+    title: World Energy Use by Source (2018)
+    notes: Worldwide primary energy consumption by fuel in 2018
     val: 
-        oil: 4418.2
-        natural gas: 3204.1
-        coal: 3732.0
-        nuclear: 592.1
-        hydro: 910.3
-        renewables: 419.6
+        oil: 4662.1
+        natural gas: 3309.4
+        coal: 3772.1
+        nuclear: 611.3
+        hydro: 948.8
+        renewables: 561.3
+
+co2 emissions:
+    ref: BP Statistical Review of World Energy 2019
+    url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/energy-economics/statistical-review/bp-stats-review-2019-full-report.pdf
+    notes: Yearly, starting in 2008
+    units: Million tonnes of CO2
+    title: World CO$_2$ emissions
+    xlabel: Year
+    ylabel: Million tonnes CO$_2$
+    val: 
+        World: [30336.7,29719.4,31057.9,31978.3,32316.7,32799.9,32844.8,32804.4,32913.5,33242.5,33890.8]
+        OECD: [13405.4,12496.2,12952.7,12821.1,12653.8,12692.0,12512.1,12389.0,12314.4,12352.9, 12405.0]
+        Non-OECD: [16931.3,17223.1,18105.2,19157.2,19663.0,20107.9,20332.7,20415.5,20599.2,20889.6,21485.8]
+        EU: [4149.4,3846.7,3941.0,3812.2,3754.2,3664.7,3458.0,3501.8,3514.3,3549.5,3479.3]
+
+
 
 worldwide resources:
     ref: World Energy Resources (wikipedia)
@@ -78,3 +95,5 @@ worldwide resources:
         gas: 36.4
         oil: 8.9
         uranium: 1000
+
+
