@@ -4,7 +4,8 @@
 %\mode<presentation>{}
 %% preamble
 \usepackage{svg}
-\usetheme[]{Boadilla}
+%\usetheme[]{Boadilla}
+\usetheme[]{default}
 \usepackage{subfig}
 \usepackage{graphicx}
 \usepackage{ulem}
@@ -12,17 +13,20 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{tikz}
 \usetikzlibrary{intersections,backgrounds}
-\setitemize{label=\usebeamerfont*{itemize item}%
-\usebeamercolor[fg]{itemize item}
-\usebeamertemplate{itemize item}}
+\setitemize{
+    label=\usebeamerfont*{itemize item}%
+    \usebeamercolor[fg]{itemize item}
+    \usebeamertemplate{itemize item}
+}
 \usepackage{media9}
 %\usepackage{pdfpcnotes}
 \usepackage{hyperref}
 \usepackage{xcolor}
-\usepackage[labelformat=empty]{caption}
-\setbeamertemplate{footline}[frame number]{}
-\setbeamertemplate{footline}{}
-\setbeamertemplate{page number in head/foot}{}
+\usepackage[labelformat=empty, justification=centering]{caption}
+%\setbeamertemplate{footline}[frame number]{}
+%\setbeamertemplate{footline}{}
+%\setbeamertemplate{page number in head/foot}{}
+\setbeamertemplate{footline}[frame number]
 \setbeamertemplate{headline}{}
 \setbeamertemplate{navigation symbols}{}
 \newcommand{\backupbegin}{
@@ -36,8 +40,8 @@
 \subtitle{Workshop on Computational Nuclear Science and Engineering}
 \date{2021-07-12}
 \institute{IAEA}
-\titlegraphic{\includegraphics[width=\textwidth,height=.3\textheight,keepaspectratio]{img/HFIR_reload.jpg}}
-\author[Touran]{Nick Touran, Ph.D., PE \\ \texttt{nick@whatisnuclear.com} }
+\titlegraphic{\includegraphics[width=\textwidth,height=.3\textheight,keepaspectratio]{img/univac-console}}
+\author[Touran]{Nick Touran, Ph.D., PE \\ \texttt{ntouran@terrapower.com} }
 \begin{document}
 %% title frame
 
@@ -45,7 +49,30 @@
 \titlepage
 \end{frame}
 
-\begin{frame}{Questions needing answers in reactor development}
+\begin{frame}{About me}
+    \begin{columns}
+    \begin{column}{0.6\textwidth}
+    \begin{itemize}
+        \item Started programming on an Osborne 1 in childhood
+        \item Nuclear engineering Ph.D. from University of Michigan
+        \item Been working at TerraPower, LLC since 2009 
+        \item Core design, fast reactor physics, software, business
+        \item P.E. in State of WA in 2019
+        \item Current role: Manager of Digital Engineering
+        \item On the side: I run \href{https://whatisnuclear.com}{whatisnuclear.com}
+    \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.80\textheight,width=0.9\textwidth,keepaspectratio]{img/nick_and_dog}
+            \caption{Me and Waffles, several months ago}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Technical questions needing answers in nuclear engineering}
         \begin{itemize}
             \item \textbf{Radiation transport} Where are the neutrons and photons? Where
                 are they headed? How fast are nuclei splitting? What power are they
@@ -54,20 +81,20 @@
                 the heat? What are the resulting pressures and vibrations?
             \item \textbf{Fuel performance} What are the mechanical and chemical
                 dynamics of fuel system given the nuclear reactions and irradiation?
-            \item \textbf{Mechanical} What are the mechanical loads amongst the fuel
-                assemblies and/or other structures?
+            \item \textbf{Mechanical} What are the mechanical loads, dynamics, and
+                vibrations amongst the fuel assemblies and/or other structures?
             \item \textbf{Plant systems} How do the pumps, pipes, heat exchangers,
                 instrumentation, etc. perform in expected and postulated on- and off-normal
                 conditions?
         \end{itemize}
 \end{frame}
 
-\begin{frame}{Answers can come from experiments}
+\begin{frame}{Experiments and observations form the initial answers}
 \begin{figure}
 \begin{tabular}{cccc}
 \subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/zppr.jpg}} &
 \subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/are_mockup.jpg}} &
-\subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/milling_yellow.jpg}} &
+\subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/hallam-cr-test-tower.jpg}} &
 \subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/appr1-core-in-crit-facility.jpg}} \\
 \subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/hengelo_sg_test_facility}} &
 \subfloat{\includegraphics[width=0.2\textwidth,height=0.4\textheight,keepaspectratio]{img/superheat-critical.jpg}}&
@@ -78,20 +105,22 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{A Milling-Yellow solution shows fluid strain optically}
+\begin{frame}{Scale models can be considered analog computers}
 \begin{columns}
     \begin{column}{0.5\textwidth}
         \begin{figure}[ht]
         \centering
-        \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/milling_yellow}
-            \caption{\small Flow patterns due to flow double refraction}
+        \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/milling_yellow_rig}
+            \caption{\tiny This rig takes pictures through a special plexiglass analog
+            of the HRE vessel}
         \end{figure}
     \end{column}
     \begin{column}{0.5\textwidth}
         \begin{figure}[ht]
         \centering
-        \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/milling_yellow_rig}
-            \caption{\small The rig used to capture the image}
+        \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/milling_yellow}
+            \caption{\tiny Flow patterns due to flow double refraction appear in a
+            Milling-Yellow solution}
         \end{figure}
     \end{column}
 \end{columns}
@@ -118,7 +147,7 @@
     \centering \tiny \url{https://babel.hathitrust.org/cgi/pt?id=mdp.39015095040682&view=1up&seq=32}
 \end{frame}
 
-\begin{frame}{History of Computational Nuclear Engineering}
+\begin{frame}{Nuclear engineers were some of the first major users of digital computers}
         \begin{figure}[ht]
         \centering
             \includegraphics[height=0.90\textheight,width=\textwidth,keepaspectratio]{img/ebr2-univac.png}
@@ -127,28 +156,14 @@
         \end{figure}
 \end{frame}
 
-%\begin{frame}{About me: Big moments}
-%\begin{columns}
-%    \begin{column}{0.7\textwidth}
-%        \begin{itemize}
-%            \item Got interested in something I consider important
-%            \item Happened upon a fringe outlet for that interest
-%            \item Eventually got serious about studies
-%            \item Chose extra-fringe/risky skillset at end of undergrad
-%            \item Reached out relatively hard to cool-sounding internships
-%            \item Luck: Had skills the Bill Gates firm needed
-%            \item Delivered cool stuff to the project
-%        \end{itemize}
-%    \end{column}
-%    \begin{column}{0.3\textwidth}
-%        \begin{figure}[ht]
-%        \centering
-%        \includegraphics[height=0.80\textheight,width=0.9\textwidth,keepaspectratio]{img/teton-cliff.jpg}
-%            \caption{\tiny Cliff in the Tetons from my INL internship}
-%        \end{figure}
-%    \end{column}
-%\end{columns}
-%\end{frame}
+\begin{frame}{There were dozens upon dozens of nuclear codes in 1964!}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/1964-diffusion-codes}
+    \caption{\small From Elizabeth Cuthill - Digital Computers in Nuclear Reactor Design, 1964
+            (\url{https://doi.org/10.1016/S0065-2458(08)60356-3})}
+        \end{figure}
+\end{frame}
 
 
 
@@ -157,39 +172,54 @@
     \begin{column}{0.7\textwidth}
         \begin{itemize}
             \item General engineering/design without the challenges of classical analysis
-            \item Explore a new space in the reactor design space
-            \item Seek insight into some complexity with ultra-high fidelity
             \item Run many perturbed cases to seek a multi-objective optimum
             \begin{itemize}
                 \item in trade studies backing design decisions
                 \item in preparation for targeted experiments 
                 \item to estimate complex system-level sensitivities
             \end{itemize}
+            \item Explore a new space in reactor design
+            \item Seek insight into some complexity with ultra-high fidelity
         \end{itemize}
     \end{column}
     \begin{column}{0.3\textwidth}
         \begin{figure}[ht]
         \centering
-        \includegraphics[height=0.80\textheight,width=0.9\textwidth,keepaspectratio]{img/teton-cliff.jpg}
-            \caption{\tiny Cliff in the Tetons}
+            \includegraphics[height=0.80\textheight,width=0.9\textwidth,keepaspectratio]{img/computer-user.png}
         \end{figure}
     \end{column}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Basic approach to deterministic computational nuclear engineering}
+    \begin{columns}
+    \begin{column}{0.4\textwidth}
     \begin{itemize}
         \item Write a balance statement
-        \item Make assumptions to simplify as appropriate
         \item Specify boundary conditions
+        \item Make assumptions to simplify as necessary
         \item Discretize the solution space considering geometry and material properties
         \item Cast balance statement into matrix form
         \item Solve matrix equation numerically
+        \item Provide results in intuitive and useful way
     \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.80\textheight,width=0.9\textwidth,keepaspectratio]{img/q2.png}
+        \end{figure}
+    \end{column}
+\end{columns}
 
 \end{frame}
 
-\section{Neutronics}
+\begin{frame}[plain,c]
+	\begin{center}
+	\Huge Neutronics
+	\end{center}
+\end{frame}
+
 \begin{frame}{The Neutron Transport Equation is a balance statement}
     \begin{center}
         \begin{figure}[ht]
@@ -244,8 +274,9 @@
         \end{figure}
     \end{column}
 \end{columns}
-    \centering \tiny From DIF3D: A Code to Solve One-, Two-, and Three-Dimensional
-    Finite-Difference Diffusion Theory Problems
+    \centering \tiny From \href{https://digital.library.unt.edu/ark:/67531/metadc283553/}{DIF3D: A Code to Solve One-, Two-, and Three-Dimensional
+    Finite-Difference Diffusion Theory
+    Problems}
 \end{frame}
 
 \begin{frame}{Some approximations to the transport equation}
@@ -285,7 +316,7 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
     \begin{equation}
     \resizebox{0.8 \textwidth}{!}
     {
-        $$
+        $
         A_{g}=\left[\begin{array}{ccccccc}
         \ddots & \ddots &  & \ddots\\
          & \left[A_{gx}^{J-1,k}\right] & \left[A_{gy}^{J,k}\right] &  & \left[A_{gz}^{J-1,k+1}\right]\\
@@ -293,14 +324,14 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
          & \text{} &  & \left[A_{gx}^{1,k+1}\right] & \left[A_{gy}^{2,k+1}\right] &  & \ddots\\
          &  &  &  & \ddots & \ddots
         \end{array}\right],
-        $$
+        $
     }
     \end{equation}
 
     \begin{equation}
     \resizebox{0.8 \textwidth}{!}
     {
-        $$
+        $
         \left[A_{gx}^{j,k}\right]=\left[\begin{array}{ccccccc}
         b_{1} & -a_{2}^{x}\\
         -a_{2}^{x} & b_{2} & -a_{3}^{x}\\
@@ -310,7 +341,7 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
          &  &  &  & -a_{I-1}^{x} & b_{I-1} & -a_{I}^{x}\\
          &  &  &  &  & -a_{I}^{x} & b_{I}
         \end{array}\right]_{ikg},
-        $$
+        $
     }
     \end{equation}
         \column{0.5\textwidth}
@@ -328,22 +359,22 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
         \begin{itemize}
             \item Unstructured mesh
             \item Detailed treatment of scattering
-            \item Requires cross section averaging lattice calc
-            \item Powerful matrix solvers (e.g. LAPACK, PETSc, Trilinos)
+            \item Requires cross section averaging lattice calculations
+            \item Powerful, iterative matrix solvers (e.g. LAPACK, PETSc, Trilinos)
         \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
         \begin{figure}[ht]
         \centering
             \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/rattlesnake-atr-mesh}
-        \caption{\small A fine mesh of the ATR from
-            https://rattlesnake.inl.gov/SitePages/Home.aspx}
+        \caption{\tiny A fine mesh of the ATR from
+            \url{https://rattlesnake.inl.gov/SitePages/Home.aspx}}
         \end{figure}
     \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Nuclear data evaluations undergo significant computation}
+\begin{frame}{Nuclear data evaluations underly transport models}
         \begin{itemize}
             \item Many measurements are made
             \item Nuclear models run to interpolate between data
@@ -368,6 +399,29 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
     \centering \tiny \url{https://www.oecd-nea.org/janisweb}
 \end{frame}
 
+\begin{frame}{Averaging cross sections across regions and energies is a complex art}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item Strong resonances from one nuclear depress flux, impact averaging of
+                others
+            \item Spatial details vs. spectral details matter differently depending on
+                composition
+            \item Nearby assemblies can impact the averaging as well
+            \item Many lattice codes are specialized for a subset of reactor designs
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/lwr-sfr-assem-neutrons}
+        \caption{\tiny What slow neutrons see vs. fast neutrons}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
 \begin{frame}{Monte Carlo: explicitly track particle histories}
 \begin{columns}
     \begin{column}{0.5\textwidth}
@@ -385,7 +439,7 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
         \begin{figure}[ht]
         \centering
             \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/monte_carlo_casino}
-            \caption{\small The Monte Carlo Casino (CC-BY-2.0 Lolipouette)} 
+            \caption{\tiny The Monte Carlo Casino (CC-BY-2.0 Lolipouette)} 
         \end{figure}
     \end{column}
 \end{columns}
@@ -423,39 +477,66 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
 \end{equation}
 
     \begin{center}
-    \includegraphics[height=0.6\textheight,width=\textwidth,keepaspectratio]{img/transmutation}
+
+    \includegraphics[height=0.6\textheight,width=\textwidth,keepaspectratio]{img/transmutation}\\
+    Solution: $N(t) = e^{A t} N(0)$
     \end{center}
 \end{frame}
 
+\begin{frame}{A warning about limitations}
+        \begin{itemize}
+            \item Underlying data have uncertainties! Keep track of them.
+            \item The value of drilling down to 0.5 pcm without a specialized application
+                in mind is dubious when there's 200-500 pcm data uncertainty
+        \end{itemize}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/na23-elastic}
+        \end{figure}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/u238-inelastic}
+        \end{figure}
+    \end{column}
+\end{columns}
+    \centering \tiny \url{https://www.oecd-nea.org/janisweb}
+\end{frame}
 
-\section{Fluid flow and heat transfer}
+
+\begin{frame}[plain,c]
+	\begin{center}
+	\Huge Fluid flow and heat transfer
+	\end{center}
+\end{frame}
+
 \begin{frame}{Fluid flow and heat transfer}
 \begin{columns}
     \begin{column}{0.5\textwidth}
         \begin{itemize}
-            \item Essential in core; highly coupled 
-            \item Essential in entire plant: pipes, pumps, and heat exchangers
-            \item Fundamental to safety performance
-            \item Often dependent on empirical correlations
-            \item 
+            \item Fundamental to safety performance: need to keep components at safe
+                temperatures and pressures
+            \item Important to economics: attempt to safely get more power out of same
+                equipment
+            \item Often strongly coupled to neutronics
         \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
-        Governing equations: Navier-Stokes
-        \begin{itemize}
-            \item Conservation of mass 
-            \item Conservation of energy
-            \item Conservation of momentum
-        \end{itemize}
-        Approach is familiar: discretize spatially, cast to matrix looking up material
-        properties, and solve
-
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/failed-ebr2-fuel}
+            \caption{\tiny Some (intentionally) overheated fuel pins \url{https://babel.hathitrust.org/cgi/pt?id=mdp.39015078511006&view=1up&seq=45}}
+        \end{figure}
     \end{column}
     \end{columns}
 \end{frame}
 
-
 \begin{frame}{Important couplings between thermal/hydraulics and neutronics}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
         \begin{itemize}
             \item Macroscopic nuclear cross sections are temperature dependent (thermal
                 expansion, soluble boron)
@@ -465,30 +546,81 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
             \item In fluid fuel reactor or severe accidents, flow moves the fuel and
                 delayed neutron precursors
         \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/mtc}
+            \caption{\tiny The Moderator Temperature Coeff in a PWR (Joseph M. Farley
+            FSAR Fig. 4.3-30) \url{https://www.nrc.gov/docs/ML0818/ML081820242.pdf}}
+        \end{figure}
+    \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Fundamental T/H codes}
+\begin{frame}{Thermal/Hydraulics Fundamentals}
+\begin{columns}
+    \begin{column}{0.7\textwidth}
+        Approach is familiar: discretize spatially, make assumptions and simplifications, cast to matrix looking up material
+        properties, and solve\\~\
+
+        Governing equations: Navier-Stokes
+        \begin{itemize}
+            \item Conservation of mass 
+            \item Conservation of energy
+            \item Conservation of momentum\\~\
+        \end{itemize}
+
+        These, plus complex fluid property lookup tables (e.g. steam tables) make T/H
+        calculations particularly conducive to computerization
+
+    \end{column}
+    \begin{column}{0.3\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/navier-stokes}
+            \caption{\tiny \href{https://www.grc.nasa.gov/www/k-12/airplane/nseqs.html}{The conservation equations}}
+        \end{figure}
+    \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{Hot channel T/H codes}
+\begin{columns}
+    \begin{column}{0.7\textwidth}
+            \begin{itemize}
+                \item 1-D fluid flow
+                \item Hot channel factors and correlations for peaking, turbulent mixing,
+                    heat transfer, friction factor, and phase slip
+                \item Single phase (liquid metal, molten salt, or gas) or two phase (water)
+                \item 1- or 2-D conduction models into fuel and structures
+                \item Full-core transient calculations trivial
+            \end{itemize}
+    \end{column}
+    \begin{column}{0.3\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.75\textheight,width=\textwidth,keepaspectratio]{img/th-channel-discret}
+            \caption{\tiny 1-D discretization of a single channel \url{https://deepblue.lib.umich.edu/handle/2027.42/89079}}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Subchannel T/H codes}
 \begin{columns}
     \begin{column}{0.7\textwidth}
         \begin{itemize}
-            \item Single channel
-                \begin{itemize}
-                    \item Typically 1-D fluid flow
-                    \item Hot channel factors and correlations for peaking, turbulent mixing,
-                        heat transfer, friction factor, and phase slip
-                    \item One phase (LMFBR or GCR) or two phase (PWR and BWR)
-                    \item 1- or 2-D conduction models into fuel and structures
-                    \item Full-core transient calculations trivial
-                \end{itemize}
-            \item Subchannel 
-                \begin{itemize}
-                    \item Communicating subchannels (mixing, conduction)
-                    \item Intra-assembly heat transfer, often 3-D conduction to fuel
-                    \item Less reliant on hot channel factors, but still needs
-                        correlations
-                    \item Full-core static calculations routine, transients doable
-                \end{itemize}
-            \end{itemize}
+            \item Typically still 1-D fluid flow
+            \item Communicating subchannels (mixing, conduction)
+            \item Intra-assembly heat transfer, often 3-D conduction to fuel
+            \item Less reliant on hot channel factors, but still need
+                correlations
+            \item Single phase or two phase 
+            \item Full-core static calculations routine, transients doable
+            \item Requires pin-level power distributions
+        \end{itemize}
     \end{column}
     \begin{column}{0.3\textwidth}
         \begin{figure}[ht]
@@ -500,28 +632,31 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Systems codes}
+\begin{frame}{Typical subchannel code physics}
 \begin{columns}
-    \begin{column}{0.7\textwidth}
-    \begin{itemize}
-        \item Simulate the entire plant in various operational and off-normal conditions
-        \item Front and center in licensing
-        \item Includes representations of major equipment in balance of plant
-            (sometimes in lower fidelity than the core)
-        \item Coupled to nuclear kinetics codes
-        \item Often incorporate subchannel code for core
-    \end{itemize}
+    \begin{column}{0.6\textwidth}
+        \begin{itemize}
+            \item Steady state and transient solvers
+            \item Single and two-phase flow models with non-uniform channel friction,
+                subcooled voids, etc.
+            \item Turbulent mixing 
+            \item Crossflow
+            \item Equation of state for various coolants
+            \item Grid spacer, wire wrap, blocked crossflow
+            \item Axial and radial heat conduction into fuel
+            \item Axial and radial heat conduction in fluid
+        \end{itemize}
     \end{column}
-    \begin{column}{0.3\textwidth}
+    \begin{column}{0.4\textwidth}
         \begin{figure}[ht]
         \centering
-            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/th-discretization}
-            \caption{\tiny Discretization in TOPAZ
-            \url{https://www.osti.gov/servlets/purl/5437631}}
+            \includegraphics[height=\textheight,width=0.8\textwidth,keepaspectratio]{img/CTF_mpact.png}
+            \caption{\tiny Subchannel results in Watts Bar 1 from CTF at ORNL \url{https://www.ornl.gov/division/rnsd/projects/ctf}}
         \end{figure}
     \end{column}
 \end{columns}
 \end{frame}
+
 
 \begin{frame}{Computational Fluid Dynamics}
 
@@ -570,37 +705,262 @@ M\phi=\frac{1}{\lambda}B\phi,\label{eq:generalizedEigenproblem}
 \end{columns}
 \end{frame}
 
-\section{Fuel Performance}
+\begin{frame}[plain,c]
+	\begin{center}
+	\Huge Core Mechanical
+	\end{center}
+\end{frame}
 
-\begin{columns}
+\begin{frame}{Core Mechanical Analysis}
+    Understanding how the fuel assemblies interact with the support structures
+    \begin{columns}
     \begin{column}{0.5\textwidth}
-        \begin{figure}[ht]
-        \centering
-            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/th-code-massflow}
-            \caption{\tiny Compute the required mass flow rate given the assembly power } 
-        \end{figure}
+        \begin{itemize}
+            \item Seismic analysis important for safety
+            \item Vibrations can cause premature fuel failure
+            \item Fuel management loads needed for reload operations
+            \item Core distortions can have large impacts on the safety case in some
+                reactors
+        \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
         \begin{figure}[ht]
         \centering
-            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/th-code-1d}
-            \caption{\tiny Given mass flow rate, compute the axial coolant temperature
-            distribution} 
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/nubow-feedback}
+            \caption{\tiny Core radial expansion's impact on FFTF reactivity
+            \url{https://www.osti.gov/servlets/purl/5236450} }
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{The Finite Element Method}
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item Works well with highly complex shapes
+            \item Governing equations: $F = ma$ and  $\sum{F} = 0$ 
+            \item Matrix size is proportional to the mesh resolution
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.85\textheight,width=\textwidth,keepaspectratio]{img/bowing}
+            \caption{\tiny A model of a core subjected to an acceleration
+            (from TerraPower LLC) }
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[plain,c]
+	\begin{center}
+	\Huge Fuel Performance
+	\end{center}
+\end{frame}
+
+\begin{frame}{Fuel Performance}
+    Reliable prediction of fuel behavior in normal and off-normal conditions.
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item Important for safety and operations-related issues like fission product retention
+            \item Tied to fuel thermal and burnup limits and therefore economics and
+                sustainability
+            \item Typically computes temperature, stress, strain, fission gas pressure,
+                fission gas release, cladding corrosion, and cladding erosion within a
+                fuel pin/clad system
+            \item Arguably should include fuel salt chemistry models for fluid fuel
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.5\textheight,width=0.5\textwidth,keepaspectratio]{img/fuelcycle4-fab}
+            \caption{\tiny Fresh fuel pellets}
+        \end{figure}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.5\textheight,width=0.5\textwidth,keepaspectratio]{img/bad-fuel}
+            \caption{\tiny Irradiated fuel slugs (from the olden days)
+            \url{https://www.osti.gov/servlets/purl/4300801}} 
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Fuel Performance computational approach}
+    \begin{columns}
+    \begin{column}{0.6\textwidth}
+        \begin{itemize}
+            \item Inherently dependent on difficult-to-measure correlations e.g. for burnup-dependent
+                properties
+            \item Beware overfitting the experimental data
+            \item Historical codes use several hundred mesh points and run in seconds on
+                a modern PC
+            \item Solves solid mechanics statics/dynamics equations including irradiation
+                strain models using finite difference or finite element methods
+            \item Several modern codes make fine-mesh problems and can leverage supercomputers
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/fraptran}
+            \caption{\tiny A typical FRAPTRAN computational mesh
+            \url{https://www.nrc.gov/docs/ML0125/ML012530260.pdf}} 
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+\begin{frame}{Fuel Performance computational approach}
+
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        Couplings
+        \begin{itemize}
+            \item Fission gas release and axial/radial strain can seriously impact
+                neutronics in many cases
+            \item Coupling with thermal/hydraulics provides fuel temperature limits
+            \item Clad strain can impact coolant flow
+            \item For fluid fuel, coupling with neutronics is fundamental
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/fuel-perf-data}
+            \caption{\tiny Fuel performance correlations from FRAPTRAN
+            \url{https://fast.labworks.org/file-download/download/public/108} }
         \end{figure}
     \end{column}
 \end{columns}
 \end{frame}
 
 
+
 \begin{frame}[plain,c]
 	\begin{center}
-	\Huge Discussion!\\
-    \includegraphics[width=0.1\textwidth,keepaspectratio]{img/reactor.png}\\
-    \normalsize More info at whatisnuclear.com \\
-    \normalsize Or email me: nick@whatisnuclear.com
+	\Huge Systems codes
 	\end{center}
 \end{frame}
 
+\begin{frame}{Systems codes}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \begin{itemize}
+        \item Simulate the entire plant in various operational and off-normal conditions
+        \item Front and center in licensing
+        \item Includes representations of major equipment in balance of plant
+            (sometimes in lower fidelity than the core)
+    \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=\textheight,width=0.9\textwidth,keepaspectratio]{img/pwr-anim-still}
+            \caption{\tiny 
+            \href{https://commons.wikimedia.org/w/index.php?title=File\%3APWR_nuclear_power_plant_animation.webm}{Plant
+            systems in a PWR}}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Simple discretization lumped-parameter models}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \begin{itemize}
+        \item Coolant property lookup tables
+        \item Includes or is heavily informed by subchannel code and fuel performance code
+        \item Includes point or spatial kinetics nuclear models
+        \item Simple models are conducive to running many hundreds of cases to support the
+            licening basis
+        \item Experimental validation sometimes easier when simple and conservative
+        \item Handle varying degrees of severe accident
+    \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.55\textheight,width=\textwidth,keepaspectratio]{img/th-discretization}
+            \caption{\tiny Discretization in TOPAZ
+            \url{https://www.osti.gov/servlets/purl/5437631}}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+\begin{frame}[plain,c]
+	\begin{center}
+	\Huge Information Management
+	\end{center}
+\end{frame}
+
+\begin{frame}{Multiphysics analysis suites}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \begin{itemize}
+        \item Automate time-consuming analysis workflows 
+        \item Capture important coupled physics effects for complex analyses
+        \item Write full analysis methodologies as code (with rigorous QA)
+        \item Leverage multiobjective optimization systems
+        \item Machine learning, AI, digital twin, etc.
+    \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.85\textheight,width=\textwidth,keepaspectratio]{img/automation}
+            \caption{\tiny A person (or supercomputer) running full-scope calculations
+            rapidly}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Project and Asset Information Management}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \begin{itemize}
+        \item Indirect costs are now ~50\% of new nuclear costs!
+        \item Inefficiencies in high-level work process are ripe for disruption
+        \item Computers as information management and process facilitators
+        \item See:
+            \href{https://www.iaea.org/publications/8438/information-technology-for-nuclear-power-plant-configuration-management}{IAEA-TECDOC-1651},
+            \href{https://www.epri.com/research/products/3002003126}{EPRI 3002003126}, and
+            \href{http://cmbg.org}{cmbg.org}.
+    \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{figure}[ht]
+        \centering
+            \includegraphics[height=0.85\textheight,width=\textwidth,keepaspectratio]{img/data_hub}
+            \caption{\tiny A data hub for nuclear enterprise
+            \url{https://www-pub.iaea.org/MTCD/Publications/PDF/te_1651_web.pdf}}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[plain,c]{Conclusions}
+    \begin{itemize}
+        \item Computers have been and will remain incredible tools for nuclear engineers
+        \item Each area has still-relevant methods (and in some cases codes!) from the 1980s and extraordinary
+            high-fidelity modern codes for specialized applications
+        \item This only barely scratches the surface; dozens of publications per month
+        \item The magnitude of mechanical, civil/structural, electrical, and operations
+            engineering at nuclear plants hasn't even been mentioned
+        \item There are parts of the nuclear enterprise that have not yet fully leveraged
+            computers
+    \end{itemize}
+	\begin{center}
+	\Huge Discussion!\\
+    \includegraphics[width=0.1\textwidth,keepaspectratio]{img/reactor.png}\\
+    \normalsize Or email me: ntouran@terrapower.com
+	\end{center}
+\end{frame}
 \appendix
 \backupbegin
 
