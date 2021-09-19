@@ -51,18 +51,18 @@ energy density:
         wood: 16.2
 
 worldwide consumption:
-    ref: BP Statistical Review of World Energy 2019
-    url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/energy-economics/statistical-review/bp-stats-review-2019-full-report.pdf
-    units: MTOE
-    title: World Energy Use by Source (2018)
-    notes: Worldwide primary energy consumption by fuel in 2018
+    ref: BP Statistical Review of World Energy 2020
+    url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/energy-economics/statistical-review/bp-stats-review-2020-full-report.pdf
+    units: Exajoules
+    title: World Energy Use by Source (2019)
+    notes: Worldwide primary energy consumption by fuel in 2019
     val: 
-        oil: 4662.1
-        natural gas: 3309.4
-        coal: 3772.1
-        nuclear: 611.3
-        hydro: 948.8
-        renewables: 561.3
+        oil: 193.03
+        natural gas: 141.45
+        coal: 157.86
+        nuclear: 24.92
+        hydro: 37.66
+        renewables: 28.98
 
 co2 emissions:
     ref: BP Statistical Review of World Energy 2019

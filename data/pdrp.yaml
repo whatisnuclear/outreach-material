@@ -1,0 +1,197 @@
+# Source mostly from the 1963 Cooperative PRDP testimony
+# where an AEC-produced PDRP history is on page 236.
+# Also: https://babel.hathitrust.org/cgi/pt?id=mdp.39015086415943&view=1up&seq=20
+# Also: INL thumbrint sketch: https://babel.hathitrust.org/cgi/pt?id=uiug.30112099074673&view=1up&seq=11
+reactors:
+    Shippingport:
+        # not actually PDRP, slight predate solicitation
+        solicited: 1953-12-07
+        contracted: 1954-03-18
+        cost estimate: 37.75
+        cost estimate basis: Plant excluding turbine generator and R&D
+        ground broken: 1954-09-09
+        critical: 1957-12-02
+        fullpower: 1957-12-23
+        shutdown: 1982-10-01
+        type: PWR
+        MWe: 60
+        location: PA
+        program: "5 year plan"
+    Yankee:
+        solicited: 1955-01-10
+        contracted: 1956-06-04
+        cost estimate: 34.5
+        cost estimate basis:
+        ground broken: 1958-04-01
+        critical: 1960-08-01
+        fullpower: 1961-06-01
+        shutdown: 1992-02-26
+        type: PWR
+        MWe: 134
+        location: Rowe, MA
+        program: PDRP
+    Fermi-1:
+        solicited: 1955-01-10
+        contracted: 1955-08-26
+        cost estimate: 47
+        cost estimate basis: 
+        ground broken: 1956-08-08 
+        critical: 1963-08-23
+        fullpower: 1970-07-01
+        shutdown: 1972-11-29
+        type: SFR
+        MWe: 150
+        location: Monroe, MI
+        program: PDRP
+    Hallam:
+        solicited: 1955-01-10
+        contracted: 1957-09-21
+        cost estimate: 30
+        cost estimate basis:
+        ground broken: 1959-01-01
+        critical: 1963-01-01
+        fullpower: 1963-07-01
+        shutdown: 1964-09-01
+        type: sodium graphite
+        MWe: 75
+        location: NE
+        program: PDRP
+    Elk River:
+        solicited: 1955-09-21
+        contracted: 1957-09-21
+        cost estimate: 30
+        cost estimate basis:
+        ground broken:  1959-01-01
+        critical: 1962-11-01
+        fullpower: 1964-07-01
+        shutdown: 1968-02-01
+        type: BWR
+        MWe: 24
+        location: MN
+        program: PDRP
+    ECNG:
+        solicited: 1957-01-07
+        contracted: 1959-09-26
+        terminated: 1961-06-01
+        type: gas-cooled heavy water pressure tube
+        location: Florida
+        MWe: 50
+        program: PDRP
+    Pathfinder: 
+        solicited: 1957-01-07
+        contracted: 1957-11-27
+        type: superheat BWR
+        MWe: 66
+        location: Sioux Falls, SD
+        ground broken:  1959-01-01
+        critical: 1964-01-01
+        fullpower: 1966-08-01
+        shutdown: 1967-10-01
+        program: PDRP
+    Carolinas-Virginia:
+        solicited: 1957-01-07
+        contracted: 1959-01-12
+        ground broken:  1960-01-01
+        critical: 1963-03-30
+        type: pressure tube heavy water
+        fullpower: 1964-05-07
+        shutdown: 1967-01-10
+        MWe: 17
+        location: Parr, SC
+        program: PDRP
+    Peach bottom:
+        solicited: 1958-09-22
+        contracted: 1959-08-27
+        MWe: 40
+        cost estimate: 27
+        location: PA
+        type: helium-cooled graphite-moderated
+        ground broken:  1962-02-01
+        critical: 1966-03-03
+        fullpower: 1967-06-01
+        shutdown: 1974-11-01
+        program: PDRP
+    BONUS:
+        # not really a 2nd round proposal but similar
+        solicited: 1958-06-01
+        contracted: 1958-12-10
+        location: Rincón, Puerto Rico
+        type: superheat BWR
+        MWe: 16.3
+        cost estimate: 11
+        ground broken:  1960-01-01
+        critical: 1964-04-14
+        fullpower: 1965-09-05
+        shutdown: 1968-06-01
+        program: PDRP
+    Big Rock Point:
+        # unsolicited proposal eligible under 110(c)
+        # Note that the 1963 history conflicts with the 1960 chronology and BRP pdf
+        contracted: 1960-04-22
+        location: Charlevoix, MI
+        MWe: 75
+        cost estimate: 27.7
+        type: high power density BWR
+        ground broken:  1960-07-20
+        critical: 1962-09-27
+        fullpower: 1963-03-21
+        shutdown: 1997-08-29
+        program: PDRP
+    La Crosse:
+        # unsolicited proposal
+        contracted: 1962-06-01
+        location: WI
+        type: BWR
+        MWe: 50
+        shutdown: 1987-04-30
+        ground broken:  1963-03-01
+        critical: 1967-07-11
+        fullpower: 1969-11-07
+        program: PDRP
+    San Onofre:
+        # unsolicited third round
+        MWe: 395
+        type: PWR
+        contracted: 1963-07-30
+        cost estimate: 83.61
+        ground broken:  1964-05-01
+        critical: 1967-06-14
+        fullpower: 1968-01-01
+        shutdown: 1992-11-30
+        location: Los Angeles, CA
+        program: PDRP
+    Piqua: 
+        solicited: 1955-09-21
+        contracted: 1958-04-30
+        location: OH
+        type: organic cooled/moderated
+        MWe: 12.5
+        cost estimate: 
+        ground broken:  1960-01-01
+        critical: 1963-06-01
+        fullpower: 1964-01-27
+        shutdown: 1966-01-13
+        program: PDRP
+    EBR-1:
+        critical: 1951-01-01
+        shutdown: 1964-01-01
+        location: ID
+        program: AEC1
+    MTR: 
+        critical:
+        program: AEC1
+    STR: 
+        critical: 1953-05-31
+        fullpower: 1953-07-25
+        program: AEC1
+    SIR: 
+        program: AEC1
+    EBR-2:
+        critical: 1961-09-30
+        program: "5 year plan"
+    OMRE: 
+        critical: 1957-09-17
+        cost: 1.8
+    LAMPRE-2:
+        ground broken: 1956-05-01
+

@@ -243,8 +243,13 @@ def process(data, season, nonelectric=False):
     # factor in other 60% that is not electric
     # gratuitously reduce primary energy assuming electric efficiency
     # by 60%
-    total_integral = demand_integral / 0.40 * 0.6
-    others_integral = (1-0.4)*total_integral  # oops had 0.6 down here earlier
+    # Today 40% of energy is electric so 60% is non-electric. But if we electrify
+    # everything let's assume the 60% chunk is itself reduced to 60%, or 36% of
+    # the original total. Then the total integral itself is also reduced to 40%+36%
+    # of the original (76%).  But since we're starting from electricity demand integral 
+    # we still have to increase the total
+    others_integral = demand_integral/0.4*0.6*0.6
+    total_integral = demand_integral  + others_integral
     # flat line value in GW will equal integral in GWd since time is 1 day
     others_gw = np.array([others_integral for dt in demand_dt])
     others = Data(demand_t, others_gw, others_integral, "Transportation,Industry,Heating", "brown")
@@ -510,7 +515,8 @@ def scene2_scaleup(season, data, nonelectric=False):
         verticalalignment="center",
     )
 
-    ax.set_title(f"{season} electricity in California")
+    kind = "electricity" if not nonelectric else "total energy"
+    ax.set_title(f"{season} {kind} in California")
 
     def run(frac):
         global fill
@@ -541,17 +547,17 @@ def scene2_scaleup(season, data, nonelectric=False):
 
         return line,
 
-
+    #run(1.0)
     #plt.tight_layout()
-    #plt.show()
-    Writer = animation.writers['ffmpeg']
-    writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)  # try -1 as well
-    ani = animation.FuncAnimation(fig, run, scaleFactor, interval=50, repeat=False,
-            cache_frame_data=False, blit=False)#, init_func=init)
+    plt.show()
+    #Writer = animation.writers['ffmpeg']
+    #writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)  # try -1 as well
+    #ani = animation.FuncAnimation(fig, run, scaleFactor, interval=50, repeat=False,
+    #        cache_frame_data=False, blit=False)#, init_func=init)
     #plt.show()
     #ani.save('summer_scale.mp4', writer=writer)
-    l2 = "sectors" if nonelectric else ""
-    ani.save(f'{season}{l2}_scaleup.mp4', )
+    #l2 = "sectors" if nonelectric else ""
+    #ani.save(f'{season}{l2}_scaleup.mp4', )
     #plt.savefig("solar-intermittency-scene1.png")
 
 
@@ -582,5 +588,5 @@ if __name__ == "__main__":
     #scene1_summer("Winter", data, showSupply=False)
     #scene1_summer("Summer", data, showSupply=False)
     #scene2_scaleup("Summer", data)
-    scene2_scaleup("Winter", data)
+    #scene2_scaleup("Winter", data)
     scene2_scaleup("Winter", data, nonelectric=True)

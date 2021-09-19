@@ -60,10 +60,11 @@ def plot(data, fname='lifecycle-carbon-emissions-nolabel.png'):
                   )
     #plt.tight_layout()
     # Manually squish the subplot to make room for labels
-    fig.subplots_adjust(bottom=0.4,top=0.90)
-    ann = ax.text(0.1, 0.1, '\n'.join(textwrap.wrap(data['ref'] + ". Plot by whatisnuclear.com.",130)),
-                  size=6, va="center", ha="left", transform=fig.transFigure
-                  )
+    #fig.subplots_adjust(bottom=0.4,top=0.90)
+    fig.subplots_adjust(bottom=0.3,top=0.90)
+    #ann = ax.text(0.1, 0.1, '\n'.join(textwrap.wrap(data['ref'] + ". Plot by whatisnuclear.com.",130)),
+    #              size=6, va="center", ha="left", transform=fig.transFigure
+    #              )
 
 
     if fname:
@@ -73,4 +74,4 @@ def plot(data, fname='lifecycle-carbon-emissions-nolabel.png'):
 
 if __name__ == '__main__':
     data = load()
-    plot(data, 'lifecycle-carbon-emissions.pdf')
+    plot(data, 'lifecycle-carbon-emissions.svg')
